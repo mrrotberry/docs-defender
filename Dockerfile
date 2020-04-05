@@ -6,6 +6,8 @@ COPY package.json yarn.lock ./
 COPY client ./client
 COPY server ./server
 
+RUN apt install -y exiftool
+
 RUN yarn --production
 RUN cd client && yarn --production && cd ..
 RUN cd server && yarn --production && cd ..
