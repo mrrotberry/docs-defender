@@ -21,6 +21,8 @@ const Decode = () => {
 
               FR.addEventListener('load', function(e) {
                 setSafeDoc(e.target.result);
+
+                setNotSafeDoc('');
               });
 
               FR.readAsDataURL(event.target.files[0]);
