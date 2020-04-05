@@ -26,6 +26,12 @@ app.register(fastifyFormBody);
 
 const pathToUpload = path.join(__dirname, '../build/www/docs');
 
+app.get('/decode', (req, reply) => {
+  console.log(13);
+  const stream = fs.createReadStream(path.join(__dirname, '../build/www/index.html'), 'utf8');
+  reply.type('text/html').send(stream);
+});
+
 app.post('/api/encode', async ({ body }, reply) => {
   try {
     const { notSafeDoc, safeDoc } = body;
@@ -45,7 +51,8 @@ app.post('/api/encode', async ({ body }, reply) => {
       comment: notSafeDoc,
     };
 
-    await ep.open()
+    await ep
+      .open()
       .then(() => ep.writeMetadata(imagePath, data, ['overwrite_original']))
       .then(console.log, console.error)
       .then(() => ep.close())
@@ -81,7 +88,7 @@ app.post('/api/decode', async ({ body }, reply) => {
       }, console.error)
       .then(() => ep.close())
       .catch(console.error);
-    
+
     console.log(2);
     return response;
   } catch (e) {
