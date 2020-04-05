@@ -59,7 +59,7 @@ app.post('/api/decode', async ({ body }, reply) => {
   }
 
   fs.writeFileSync(
-    path.join(__dirname, `${pathToUpload}decode.png`),
+    path.join(__dirname, `${pathToUpload}/decode.png`),
     body.safeDoc.replace(/^data:image\/png;base64,/, ''),
     'base64'
   );
