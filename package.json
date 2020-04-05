@@ -8,9 +8,8 @@
     "client:build": "yarn --cwd client build",
     "server:build": "yarn --cwd server build",
     "build": "yarn client:build && yarn server:build && copyfiles -u 2 -a 'client/build/**/*' server/build/www/",
-    "start": "yarn build && yarn --cwd server start"
   },
-  "devDependencies": {
+  "dependencies": {
     "copyfiles": "^2.2.0"
   },
   "license": "MIT"
