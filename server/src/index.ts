@@ -58,11 +58,7 @@ app.post('/api/decode', async ({ body }, reply) => {
     return reply.code(404);
   }
 
-  fs.writeFileSync(
-    path.join(__dirname, `${pathToUpload}/decode.png`),
-    body.safeDoc.replace(/^data:image\/png;base64,/, ''),
-    'base64'
-  );
+  fs.writeFileSync(`${pathToUpload}/decode.png`, body.safeDoc.replace(/^data:image\/png;base64,/, ''), 'base64');
 
   const ep = new exiftool.ExiftoolProcess();
 
