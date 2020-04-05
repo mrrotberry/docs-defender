@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+
+  docs-defender:
+    container_name: 'docs-defender'
+    build: .
+    ports:
+      - 4000:4000
+    expose:
+      - 4000
