@@ -27,51 +27,67 @@ app.register(fastifyFormBody);
 const pathToUpload = path.join(__dirname, '../build/www/docs');
 
 app.post('/api/encode', async ({ body }, reply) => {
-  const { notSafeDoc, safeDoc } = body;
+  try {
+    const { notSafeDoc, safeDoc } = body;
 
-  if (!fs.existsSync(pathToUpload)) {
-    fs.mkdirSync(pathToUpload, { recursive: true });
+    if (!fs.existsSync(pathToUpload)) {
+      fs.mkdirSync(pathToUpload, { recursive: true });
+    }
+
+    fs.writeFileSync(`${pathToUpload}/safe-doc.png`, safeDoc.replace(/^data:image\/png;base64,/, ''), 'base64');
+
+    const ep = new exiftool.ExiftoolProcess();
+
+    const imagePath = path.resolve(__dirname, `${pathToUpload}/safe-doc.png`);
+
+    const data = {
+      all: '',
+      comment: notSafeDoc,
+    };
+
+    await ep.open()
+      .then(() => ep.writeMetadata(imagePath, data, ['overwrite_original']))
+      .then(console.log, console.error)
+      .then(() => ep.close())
+      .catch(console.error);
+
+    return reply.code(200).send('All ok!');
+  } catch (e) {
+    console.log(e);
+    return e;
   }
-
-  fs.writeFileSync(`${pathToUpload}/safe-doc.png`, safeDoc.replace(/^data:image\/png;base64,/, ''), 'base64');
-
-  const ep = new exiftool.ExiftoolProcess();
-
-  const imagePath = path.resolve(__dirname, `${pathToUpload}/safe-doc.png`);
-
-  const data = {
-    all: '',
-    comment: notSafeDoc,
-  };
-
-  ep.open()
-    .then(() => ep.writeMetadata(imagePath, data, ['overwrite_original']))
-    .then(console.log, console.error)
-    .then(() => ep.close())
-    .catch(console.error);
-
-  return reply.code(200).send(fs.readFileSync(imagePath, 'base64'));
 });
 
 app.post('/api/decode', async ({ body }, reply) => {
-  if (!fs.existsSync(pathToUpload)) {
-    return reply.code(404);
+  try {
+    let response = '123';
+
+    if (!fs.existsSync(pathToUpload)) {
+      return reply.code(404);
+    }
+
+    fs.writeFileSync(`${pathToUpload}/decode.png`, body.safeDoc.replace(/^data:image\/png;base64,/, ''), 'base64');
+
+    const ep = new exiftool.ExiftoolProcess();
+
+    const imagePath = path.resolve(__dirname, `${pathToUpload}/decode.png`);
+
+    await ep
+      .open()
+      .then(() => ep.readMetadata(imagePath, ['Comment']))
+      .then(result => {
+        console.log(1);
+        response = result.data[0].Comment;
+      }, console.error)
+      .then(() => ep.close())
+      .catch(console.error);
+    
+    console.log(2);
+    return response;
+  } catch (e) {
+    console.log(e);
+    return e;
   }
-
-  fs.writeFileSync(`${pathToUpload}/decode.png`, body.safeDoc.replace(/^data:image\/png;base64,/, ''), 'base64');
-
-  const ep = new exiftool.ExiftoolProcess();
-
-  const imagePath = path.resolve(__dirname, `${pathToUpload}/decode.png`);
-
-  return ep
-    .open()
-    .then(() => ep.readMetadata(imagePath, ['Comment']))
-    .then(result => {
-      return reply.code(200).send(result.data[0].Comment);
-    }, console.error)
-    .then(() => ep.close())
-    .catch(console.error);
 });
 
 const start = async () => {
