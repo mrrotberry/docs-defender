@@ -1,8 +1,5 @@
 FROM node:lts-slim
 
-ENV NODE_PATH=./build
-ENV NODE_ENV=production
-
 WORKDIR /usr/src/docs-defender
 
 COPY package.json yarn.lock ./
@@ -18,4 +15,4 @@ RUN yarn build
 
 EXPOSE 4000
 
-CMD ["node", "build/index.js"]
+CMD ["NODE_PATH=./build", "NODE_ENV=production", "node", "build/index.js"]
