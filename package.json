@@ -7,7 +7,7 @@
     "dev": "yarn server:dev & yarn client:dev",
     "client:build": "yarn --cwd client build",
     "server:build": "yarn --cwd server build",
-    "build": "yarn client:build && yarn server:build && copyfiles -u 2 -a 'client/build/**/*' server/build/www/",
+    "build": "yarn client:build && yarn server:build && copyfiles -u 2 -a 'client/build/**/*' server/build/www/"
   },
   "dependencies": {
     "copyfiles": "^2.2.0"
