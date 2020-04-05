@@ -15,4 +15,4 @@ RUN yarn build
 
 EXPOSE 4000
 
-CMD ["NODE_PATH=./build", "NODE_ENV=production", "node", "build/index.js"]
+CMD ["NODE_PATH=./server/build", "NODE_ENV=production", "node", "server/build/index.js"]
