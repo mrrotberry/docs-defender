@@ -80,7 +80,7 @@ app.post('/api/decode', async ({ body }, reply) => {
 
 const start = async () => {
   try {
-    await app.listen(4000);
+    await app.listen({ host: '0.0.0.0', port: 4000 });
     app.log.info(`server listening on ${app.server.address()}`);
   } catch (err) {
     app.log.error(err);
