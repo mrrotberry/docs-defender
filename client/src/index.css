@@ -1,0 +1,37 @@
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.tui-image-editor-header-buttons {
+  display: none !important;
+}
+
+.tie-shape-button .circle,
+.tie-shape-button .triangle {
+    display: none !important;
+}
+
+.tui-image-editor-newline.tui-image-editor-range-wrap {
+    display: none !important;
+}
+
+.tui-image-editor-container .color-picker-control .tui-colorpicker-palette-button {
+  width: 14px;
+  height: 14px;
+  margin: auto;
+}
+
+.tui-image-editor-container .color-picker-control .tui-colorpicker-palette-container ul {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tui-image-editor-container .color-picker-control .tui-colorpicker-palette-container ul li {
+  display: flex;
+  width: 16px;
+  height: 16px;
+  padding: 4px;
+  list-style: none;
+  box-sizing: content-box;
+}
