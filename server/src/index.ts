@@ -30,7 +30,7 @@ app.post('/api/encode', async ({ body }, reply) => {
   const { notSafeDoc, safeDoc } = body;
 
   if (!fs.existsSync(pathToUpload)) {
-    fs.mkdirSync(pathToUpload);
+    fs.mkdirSync(pathToUpload, { recursive: true });
   }
 
   fs.writeFileSync(`${pathToUpload}/safe-doc.png`, safeDoc.replace(/^data:image\/png;base64,/, ''), 'base64');
@@ -59,14 +59,14 @@ app.post('/api/decode', async ({ body }, reply) => {
   }
 
   fs.writeFileSync(
-    path.join(__dirname, '../build/www/docs/decode.png'),
+    path.join(__dirname, `${pathToUpload}decode.png`),
     body.safeDoc.replace(/^data:image\/png;base64,/, ''),
     'base64'
   );
 
   const ep = new exiftool.ExiftoolProcess();
 
-  const imagePath = path.resolve(__dirname, '../build/www/docs/decode.png');
+  const imagePath = path.resolve(__dirname, `${pathToUpload}/decode.png`);
 
   return ep
     .open()
@@ -81,7 +81,6 @@ app.post('/api/decode', async ({ body }, reply) => {
 const start = async () => {
   try {
     await app.listen({ host: '0.0.0.0', port: 4000 });
-    app.log.info(`server listening on ${app.server.address()}`);
   } catch (err) {
     app.log.error(err);
     process.exit(1);
